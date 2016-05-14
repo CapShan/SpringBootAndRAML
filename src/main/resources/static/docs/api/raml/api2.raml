@@ -1,0 +1,155 @@
+#%RAML 0.8
+title: Remote Medicine Example API
+mediaType: application/json
+/cases:
+  description: The urgent cases created by the remote medicine partner
+  get:
+    description: Get a list of cases
+    queryParameters:
+      startFrom:
+        type: number
+        description: The number of the first question, where 0 means latest
+        default: 0
+      numberToReturn:
+        type: number
+        description: How many questions to return
+        default: 5
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "totalNumber": 3781,
+              "cases:
+              [
+                { 
+                  "id": "c68732",
+                  "overview": "The patient just collapsed",
+                  "location": "Oro Valley",
+                  "created": "Sat, 24 May 2014 23:18:01 GMT"
+                },
+                { 
+                  "id": "c98729",
+                  "overview": "The patient felt severe headaches and saw flashes",
+                  "location": "Chennai",
+                  "created": "Fri, 25 Apr 2014 04:34:00 GMT"
+                }
+              ]
+            }
+  post:
+    description: Create a new case
+    body:
+      schema: |
+        {
+          "$schema": "http://json-schema.org/draft-03/schema" ,
+          "type": "object",
+          "properties": 
+          {
+            "overview": { "type": "string", "required": true },
+            "location": { "type": "string", "required": true }
+          }
+        }
+      example: |
+        { 
+          "overview": "A female patient is going into early labor",
+          "location": "Madras"
+        }
+    responses:
+      201:
+        description: New case created
+        body:
+          example: |
+            { 
+              "id": "c02092",
+              "overview": "A female patient is going into early labor",
+              "location": "Tirunelveli",
+              "created": "Fri, 23 May 2014 10:34:00 GMT"
+            }
+  /{caseId}:
+    description: A specific urgent case
+    get:
+      description: Get a specific case
+      responses:
+        200:
+          body:
+            example: |
+              { 
+                "id": "c02092",
+                "overview": "A female patient is going into early labor",
+                "location": "Tirunelveli",
+                "created": "Fri, 23 May 2014 10:34:00 GMT"
+              }
+    /questions:
+      description: Question submitted by the partner for this case
+      post:
+        description: Post a new question on this case
+        body:
+          example: |
+            {
+              "from": "Harry B",
+              "question": "Should I try CPR?"
+            }
+        responses:
+          201:
+            body:
+              example: |
+                {
+                  "message": "Question received, we will get back to you shortly"
+                }
+    /answers:
+      description: Answers received from the extended hospital's urgent care staff
+      get:
+        description: Get a list of answers on this case
+        queryParameters:
+          startFrom:
+            type: number
+            description: The number of the first question, where 0 means latest
+            default: 0
+          numberToReturn:
+            type: number
+            description: How many questions to return
+            default: 5
+        responses:
+          200:
+            body:
+              example: |
+                {
+                  "totalNumber": 28,
+                  "answers":
+                  [
+                    {
+                      "id": "a7683987",
+                      "from": "Dr Shan",
+                      "answer": "Look whether the pupils respond",
+                      "created": "Fri, 23 May 2014 10:45:00 GMT"
+                    },
+                    {
+                      "id": "a7683993",
+                      "from": "Dr Rithicaa",
+                      "answer": "Inject 15mg of Epi",
+                      "created": "Fri, 23 May 2014 10:50:00 GMT"
+                    },
+                    {
+                      "id": "a7684013",
+                      "from": "Dr Vilasini",
+                      "answer": "Re-open airway",
+                      "created": "Fri, 23 May 2014 10:52:00 GMT"
+                    }
+                  ]
+                }
+      post:
+        description: Post a new answer on this case (usually done by texting)
+        body:
+          example: |
+            {
+              "from": "Dr Vijaya",
+              "answer": "She may be in shock, check her pulse"
+            }
+        responses:
+          201:
+            body:
+              example: |
+                {
+                  "message": "Answer received"
+                }
+

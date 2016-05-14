@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: uk.gov.dwp.pss.roc.doc.api.RocDocumentationApiApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.608 sec - in uk.gov.dwp.pss.roc.doc.api.RocDocumentationApiApplicationTests
